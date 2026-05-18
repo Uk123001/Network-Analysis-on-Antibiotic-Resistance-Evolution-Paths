@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>optrA Resistance Analyser</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- D3 for Eulerian subgraph rendering -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+</head>
+<body>
+
+<!-- ═══════════════════════  HEADER  ════════════════════════════ -->
+<header>
+  <img src="logo.png" alt="Logo" class="header-logo"
+       onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';" />
+  <div id="logo-fallback" class="header-logo-fallback" style="display:none;">oA</div>
+
+  <div class="header-text">
+    <h1>optrA Resistance Analyser</h1>
+    <p>GNN-powered antibiotic resistance locus detection &amp; visualisation</p>
+  </div>
+
+  <span class="header-badge">optrA · Network Analysis</span>
+</header>
+
+<!-- ═══════════════════════  MAIN  ══════════════════════════════ -->
+<main>
+
+  <!-- ── Input card (full-width) ─────────────────────────────── -->
+  <section class="card" id="input-card">
+    <h2 class="card-title">
+      <span class="icon">🧬</span>
+      Enter your sequence
+    </h2>
+
+    <label class="seq-label" for="seq-input">
+      Paste a raw DNA sequence (optrA gene, A/T/G/C only)
+    </label>
+    <textarea id="seq-input"
+              placeholder="e.g. ATGAAAGTTATAATCCTGACAACAGGTTTTTTAGACATTGATCGT…"
+              spellcheck="false"
+              autocomplete="off"></textarea>
+    <div class="char-counter"><span id="char-count">0</span> bases</div>
+
+    <div class="input-divider">or</div>
+
+    <div class="input-row">
+      <button class="btn btn-secondary" id="btn-test-seq">
+        🔀 Use test sequence
+      </button>
+      <button class="btn btn-primary" id="btn-analyze">
+        <span class="spinner"></span>
+        <span class="btn-label">🔍 Analyse Sequence</span>
+      </button>
+      <button class="btn btn-outline" id="btn-clear" title="Clear input">
+        ✕ Clear
+      </button>
+    </div>
+  </section>
+
+
+  <!-- ── Results (full-width, hidden until run) ──────────────── -->
+  <section id="results-section">
+
+    <!-- Verdict banner -->
+    <div id="verdict-banner" class="verdict-banner">
+      <div class="verdict-icon" id="verdict-icon"></div>
+      <div class="verdict-text">
+        <h2 id="verdict-title"></h2>
+        <p  id="verdict-subtitle"></p>
+      </div>
+    </div>
+
+    <!-- Confidence + features row -->
+    <div class="results-grid">
+
+      <div class="card">
+        <h3 class="card-title"><span class="icon">📊</span>Confidence</h3>
+        <div class="confidence-block">
+          <div class="confidence-header">
+            <span class="confidence-label">Resistance probability</span>
+            <span class="confidence-value" id="conf-value">—</span>
+          </div>
+          <div class="confidence-bar-track">
+            <div class="confidence-bar-fill" id="conf-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 class="card-title"><span class="icon">🔬</span>Sequence Features</h3>
+        <div class="feat-grid" id="feat-grid">
+          <!-- filled by JS -->
+        </div>
+      </div>
+
+    </div><!-- /results-grid -->
+
+    <!-- Antibiotic types -->
+    <div class="card" style="margin-bottom:22px;">
+      <h3 class="card-title"><span class="icon">💊</span>Antibiotic Resistance Types Detected</h3>
+      <div class="ab-grid" id="ab-grid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Loci + graphs -->
+    <div class="card loci-section">
+      <h3 class="card-title"><span class="icon">📍</span>Top-3 Resistance Loci  <small style="font-weight:400;color:var(--text-light);font-size:.78rem;margin-left:6px;">(Eulerian subgraph ± 5 nodes)</small></h3>
+      <div class="loci-grid" id="loci-grid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Redo -->
+    <div class="redo-row">
+      <button class="btn btn-primary" id="btn-redo">
+        🔄 Run another analysis
+      </button>
+    </div>
+
+  </section><!-- /results-section -->
+
+
+  <!-- ── Sidebar: history ────────────────────────────────────── -->
+  <aside>
+    <div class="card" id="history-panel">
+      <h3 class="card-title"><span class="icon">🕓</span>History</h3>
+      <ul class="history-list" id="history-list">
+        <li class="history-empty" id="history-empty">No analyses yet.</li>
+      </ul>
+      <button class="history-clear-btn" id="btn-clear-history">Clear history</button>
+    </div>
+  </aside>
+
+</main><!-- /main -->
+
+
+<!-- ── Loading overlay ─────────────────────────────────────── -->
+<div id="loading-overlay">
+  <div class="loading-spinner-lg"></div>
+  <div class="loading-text" id="loading-text">Running GNN analysis…</div>
+</div>
+
+<!-- ── Toast ────────────────────────────────────────────────── -->
+<div id="toast"></div>
+
+
+<script src="app.js"></script>
+</body>
+</html>
