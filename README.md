@@ -33,7 +33,6 @@ to create a complete computational pipeline for resistance prediction and evolut
 
 # 🖼️ Workflow Architecture
 
-> Make sure `Flowchart.png` is present in the main branch/root folder.
 
 <p align="center">
   <img src="Flowchart.png" width="850">
@@ -47,7 +46,7 @@ to create a complete computational pipeline for resistance prediction and evolut
 ✅ DNA feature extraction  
 ✅ Transformer embedding generation  
 ✅ Feature selection and dimensionality reduction  
-✅ Multiple classifier comparisons  
+✅ Multiple classifier models' comparison
 ✅ Logistic Regression resistance prediction  
 ✅ Graph-based resistance locus analysis  
 ✅ SHAP & LIME explainability  
